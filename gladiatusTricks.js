@@ -6,9 +6,13 @@
 // @author       Aveneid
 // @match        *://*.gladiatus.gameforge.com/game/index.php*
 // @icon         https://www.google.com/s2/favicons?domain=gameforge.com
-// @grant        none
+// @downloadURL  https://raw.githubusercontent.com/Aveneid/GladiatusTricks/main/gladiatusTricks.js
+// @updateURL    https://raw.githubusercontent.com/Aveneid/GladiatusTricks/main/gladiatusTricks.js
+// @grant        GM_addStyle
+// @grant        GM_getResourceText
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
 // @license MIT
+// @resource	 css https://raw.githubusercontent.com/Aveneid/GladiatusTricks/main/css.css
 
 // ==/UserScript==
 
@@ -22,12 +26,11 @@
 		GT_set24H: false
 	};
 
-	var css = "ul{padding:0;margin:0}li{width:100%;list-style-type:none;display:block}.menuMain{position:fixed;z-index:999;right:0;bottom:0;background:linear-gradient(#212121 0%, #010101 100%);color:#fff;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;text-decoration:none;_text-align:center;box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);-webkit-box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);-moz-box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);border-radius:2px;-webkit-border-radius:2px;display:block;padding:2px;width:275px}.menuOpen{cursor:hand;display:block;padding:10px 8px;line-height:18px;text-align:center}.menuBackground{background:#fff;color:#000;display:block;line-height:40px;padding:0 12px 0 12px;box-shadow:0px 1px 1px 0px #bbb inset;-webkit-box-shadow:0px 1px 1px 0px #bbb inset;-moz-box-shadow:0px 1px 1px 0px #bbb inset}.menuButton{-webkit-border-radius:3px;color:#fff;display:block;float:right;font-size:12px;line-height:22px;margin:4px;padding:0 10px;text-align:center;cursor:pointer}.menuButtonGreen{background:#66c321;background:-webkit-linear-gradient(#66c321 0%, #4ba508 100%);background:-o-linear-gradient(#66c321 0%, #4ba508 100%);background:-moz-linear-gradient(#66c321 0%, #4ba508 100%);background:linear-gradient(#66c321 0%, #4ca70a 100%);border-radius:3px;border-top:1px solid #86e923;border-bottom:1px solid #397b08}.menuButtonRed{background:#a44141;background:-webkit-linear-gradient(#c32121 0%, #a50808 100%);background:-o-linear-gradient(#c32121 0%, #a50808 100%);background:-moz-linear-gradient(#c32121 0%, #a50808 100%);background:linear-gradient(#c32121 0%, #a50808 100%);border-radius:3px;border-top:1px solid #e92323;border-bottom:1px solid #7b0808}.menuButtonBlue{background:#2143c3;background:-webkit-linear-gradient(#2143c3 0%, #230aa7 100%);background:-o-linear-gradient(#2143c3 0%, #230aa7 100%);background:-moz-linear-gradient(#2143c3 0%, #230aa7 100%);background:linear-gradient(#2143c3 0%, #230aa7 100%);border-radius:3px;border-top:1px solid #2343e9;border-bottom:1px solid #08167b}";
 	var htmlMenu = "<div class='menuMain'><span class='menuOpen'>Gladiatus Tricks Menu</span><div id='menuDrop' class='menuBackground' style='display: none;'><ul><li>Remove banner <div class='menuButton menuButtonGreen' id='GT_removeBanner'>On<div><li> <li>Get gold form packages  <div class='menuButton menuButtonGreen' id='GT_gold' >On<div><li> <li>Set listing for 24H <div class='menuButton menuButtonGreen' id='GT_set24H'>On<div><li> </ul><span style='width: auto;' class='menuButton'>Gladiatus Tricks by Aveneid</span></div></div>";
 
 	function createWindow(){
 		//create menu window
-		$("head").append("<style>"+css+"</style>");
+		$("head").append("<style>"+GM_getResourceText("css")+"</style>");
 		$("body").append(htmlMenu);
 		$('.menuOpen').click(function () {
 			$('#menuDrop').slideToggle("fast","swing");
