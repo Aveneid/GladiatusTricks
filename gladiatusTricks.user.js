@@ -26,7 +26,7 @@
 		GT_set24H: false
 	};
 
-	var htmlMenu = "<div class='menuMain'><span class='menuOpen'>Gladiatus Tricks Menu</span><div id='menuDrop' class='menuBackground' style='display: none;'><ul><li>Remove banner <div class='menuButton menuButtonGreen' id='GT_removeBanner'>On<div><li> <li>Get gold form packages  <div class='menuButton menuButtonGreen' id='GT_gold' >On<div><li> <li>Set listing for 24H <div class='menuButton menuButtonGreen' id='GT_set24H'>On<div><li> </ul><span style='width: auto;' class='menuButton'>Gladiatus Tricks by Aveneid</span></div></div>";
+	var htmlMenu = "<div class='menuMain'><span class='menuOpen'>Gladiatus Tricks Menu</span><div id='menuDrop' class='menuBackground' style='display: none;'><ul><li>Remove banner <div class='menuButton menuButtonGreen' id='GT_removeBanner'>On<div><li> <li>Get gold form packages  <div class='menuButton menuButtonGreen' id='GT_gold' >On<div><li> <li>Set listing for 24H <div class='menuButton menuButtonGreen' id='GT_set24H'>On<div><li> </ul><span style='width: auto;' class='menuButton' id='GT_info'>Gladiatus Tricks by Aveneid</span></div></div>";
 
 	function createWindow(){
 		//create menu window
@@ -69,8 +69,9 @@
 		switch(data){
 			case "GT_removeBanner":
 				config[data]=!config[data];
+
 				console.log("Setting banner to :"+config[data]);
-				if(config[data]){
+				if(!config[data]){
 					$("div#GT_removeBanner").removeClass("menuButtonGreen");$("div#GT_removeBanner").addClass("menuButtonRed");$("div#GT_removeBanner").text("Off");
 				}else{
 					$("div#GT_removeBanner").removeClass("menuButtonRed");$("div#GT_removeBanner").addClass("menuButtonGreen");$("div#GT_removeBanner").text("On")
@@ -79,8 +80,9 @@
 
 			case "GT_gold":
 				config[data]=!config[data];
+
 				console.log("Setting gold to :"+config[data]);
-				if(config[data]){
+				if(!config[data]){
 					$("div#GT_gold").removeClass("menuButtonGreen");$("div#GT_gold").addClass("menuButtonRed");$("div#GT_gold").text("Off");
 				}else{
 					$("div#GT_gold").removeClass("menuButtonRed");$("div#GT_gold").addClass("menuButtonGreen");$("div#GT_gold").text("On");
@@ -89,8 +91,9 @@
 
 			case "GT_set24H":
 				config[data]=!config[data];
+
 				console.log("Setting listing to :"+config[data]);
-				if(config[data]){
+				if(!config[data]){
 					$("div#GT_set24H").removeClass("menuButtonGreen");$("div#GT_set24H").addClass("menuButtonRed");$("div#GT_set24H").text("Off");
 				}else{
 					$("div#GT_set24H").removeClass("menuButtonRed");$("div#GT_set24H").addClass("menuButtonGreen");$("div#GT_set24H").text("On");
@@ -131,11 +134,11 @@
 		saveCfg();
 
 		if(window.location.href.contains("mod=market")){
-			if(config.GT_set24H)
+			if(config.GT_set24H == true)
 				document.querySelector("#dauer").value = 3;
 		}
 		//removes banner
-		if(config.GT_removeBanner){
+		if(config.GT_removeBanner == true){
 			$("#banner_top").css("display","none");
 			$("#banner_event").css("display","none");
 			$("#banner_event_link").css("display","none");
@@ -143,7 +146,7 @@
 		}
 		if(window.location.href.contains("mod=packages")){
 			//collect all gold from packages
-			if(config.GT_getGold)
+			if(config.GT_getGold == true)
 				if($("div.item-i-14-1").length > 0){
 					var total = 0;
 					$("div.item-i-14-1").each(function(){
