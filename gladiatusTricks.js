@@ -1,0 +1,155 @@
+// ==UserScript==
+// @name         Gladiatus Tricks
+// @namespace    http://tampermonkey.net/
+// @version      1
+// @description  Gladiatus script with small game improvements
+// @author       Aveneid
+// @match        *://*.gladiatus.gameforge.com/game/index.php*
+// @icon         https://www.google.com/s2/favicons?domain=gameforge.com
+// @grant        none
+// @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
+// @license MIT
+
+// ==/UserScript==
+
+(function() {
+	'use strict';
+
+	var storage = window.localStorage;
+	var config ={
+		GT_removeBanner: false,
+		GT_getGold: false,
+		GT_set24H: false
+	};
+
+	var css = "ul{padding:0;margin:0}li{width:100%;list-style-type:none;display:block}.menuMain{position:fixed;z-index:999;right:0;bottom:0;background:linear-gradient(#212121 0%, #010101 100%);color:#fff;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;text-decoration:none;_text-align:center;box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);-webkit-box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);-moz-box-shadow:0px 2px 8px 0px rgba(50, 50, 50, 0.6);border-radius:2px;-webkit-border-radius:2px;display:block;padding:2px;width:275px}.menuOpen{cursor:hand;display:block;padding:10px 8px;line-height:18px;text-align:center}.menuBackground{background:#fff;color:#000;display:block;line-height:40px;padding:0 12px 0 12px;box-shadow:0px 1px 1px 0px #bbb inset;-webkit-box-shadow:0px 1px 1px 0px #bbb inset;-moz-box-shadow:0px 1px 1px 0px #bbb inset}.menuButton{-webkit-border-radius:3px;color:#fff;display:block;float:right;font-size:12px;line-height:22px;margin:4px;padding:0 10px;text-align:center;cursor:pointer}.menuButtonGreen{background:#66c321;background:-webkit-linear-gradient(#66c321 0%, #4ba508 100%);background:-o-linear-gradient(#66c321 0%, #4ba508 100%);background:-moz-linear-gradient(#66c321 0%, #4ba508 100%);background:linear-gradient(#66c321 0%, #4ca70a 100%);border-radius:3px;border-top:1px solid #86e923;border-bottom:1px solid #397b08}.menuButtonRed{background:#a44141;background:-webkit-linear-gradient(#c32121 0%, #a50808 100%);background:-o-linear-gradient(#c32121 0%, #a50808 100%);background:-moz-linear-gradient(#c32121 0%, #a50808 100%);background:linear-gradient(#c32121 0%, #a50808 100%);border-radius:3px;border-top:1px solid #e92323;border-bottom:1px solid #7b0808}.menuButtonBlue{background:#2143c3;background:-webkit-linear-gradient(#2143c3 0%, #230aa7 100%);background:-o-linear-gradient(#2143c3 0%, #230aa7 100%);background:-moz-linear-gradient(#2143c3 0%, #230aa7 100%);background:linear-gradient(#2143c3 0%, #230aa7 100%);border-radius:3px;border-top:1px solid #2343e9;border-bottom:1px solid #08167b}";
+	var htmlMenu = "<div class='menuMain'><span class='menuOpen'>Gladiatus Tricks Menu</span><div id='menuDrop' class='menuBackground' style='display: none;'><ul><li>Remove banner <div class='menuButton menuButtonGreen' id='GT_removeBanner'>On<div><li> <li>Get gold form packages  <div class='menuButton menuButtonGreen' id='GT_gold' >On<div><li> <li>Set listing for 24H <div class='menuButton menuButtonGreen' id='GT_set24H'>On<div><li> </ul><span style='width: auto;' class='menuButton'>Gladiatus Tricks by Aveneid</span></div></div>";
+
+	function createWindow(){
+		//create menu window
+		$("head").append("<style>"+css+"</style>");
+		$("body").append(htmlMenu);
+		$('.menuOpen').click(function () {
+			$('#menuDrop').slideToggle("fast","swing");
+		});
+
+
+		$("#GT_gold").click(function(){
+			setCfg("gold");
+		});
+		$("#GT_removeBanner").click(function(){
+			setCfg("removeBanner");
+		});
+		$("#GT_set24H").click(function(){
+			setCfg("set24H");
+		});
+	}
+
+
+	//helpers
+	function loadCfg(){
+		if(storage.getItem("GT_gladiatusTricks")){
+			//load config from localStorage
+			Object.keys(storage).forEach(function(keys){if(keys.substring(0,3)=="GT_") config[keys]=storage[keys];})
+			Object.keys(config).forEach(function(keys){if(config[keys]==true){ $("div#"+keys).removeClass("menuButtonGreen");$("div#"+keys).addClass("menuButtonRed");$("div#GT_removeBanner").text("Off");}});
+		}
+	}
+	function saveCfg(){
+		//save config to local storage
+		Object.keys(config).forEach(function(key){storage.setItem(key,config[key]);})
+		storage.setItem("GT_gladiatusTricks",true);
+	}
+
+	function setCfg(data){
+		//set config depending on option
+		data = "GT_"+data;
+		switch(data){
+			case "GT_removeBanner":
+				config[data]=!config[data];
+				console.log("Setting banner to :"+config[data]);
+				if(config[data]){
+					$("div#GT_removeBanner").removeClass("menuButtonGreen");$("div#GT_removeBanner").addClass("menuButtonRed");$("div#GT_removeBanner").text("Off");
+				}else{
+					$("div#GT_removeBanner").removeClass("menuButtonRed");$("div#GT_removeBanner").addClass("menuButtonGreen");$("div#GT_removeBanner").text("On")
+				}
+				break;
+
+			case "GT_gold":
+				config[data]=!config[data];
+				console.log("Setting gold to :"+config[data]);
+				if(config[data]){
+					$("div#GT_gold").removeClass("menuButtonGreen");$("div#GT_gold").addClass("menuButtonRed");$("div#GT_gold").text("Off");
+				}else{
+					$("div#GT_gold").removeClass("menuButtonRed");$("div#GT_gold").addClass("menuButtonGreen");$("div#GT_gold").text("On");
+				}
+				break;
+
+			case "GT_set24H":
+				config[data]=!config[data];
+				console.log("Setting listing to :"+config[data]);
+				if(config[data]){
+					$("div#GT_set24H").removeClass("menuButtonGreen");$("div#GT_set24H").addClass("menuButtonRed");$("div#GT_set24H").text("Off");
+				}else{
+					$("div#GT_set24H").removeClass("menuButtonRed");$("div#GT_set24H").addClass("menuButtonGreen");$("div#GT_set24H").text("On");
+				}
+				break;
+		}
+		saveCfg();
+	}
+
+
+	function getElementByXpath(path) {
+		return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+	}
+	function createNotification(text,type){
+		switch(type){
+			case "normal":
+				gca_notifications.normal(text);
+				break;
+			case "success":
+				gca_notifications.success(text);
+				break;
+			case "error":
+				gca_notifications.error(text);
+				break;
+			case "info":
+				gca_notifications.info(text);
+				break;
+			case "warning":
+				gca_notifications.warning(text);
+				break;
+		}
+	}
+
+	//main
+	$( document ).ready(function() {
+		createWindow();
+		loadCfg();
+		saveCfg();
+
+		if(window.location.href.contains("mod=market")){
+			if(config.GT_set24H)
+				document.querySelector("#dauer").value = 3;
+		}
+		//removes banner
+		if(config.GT_removeBanner){
+			$("#banner_top").css("display","none");
+			$("#banner_event").css("display","none");
+			$("#banner_event_link").css("display","none");
+			$("#cooldown_bar_event").css("display","none");
+		}
+		if(window.location.href.contains("mod=packages")){
+			//collect all gold from packages
+			if(config.GT_getGold)
+				if($("div.item-i-14-1").length > 0){
+					var total = 0;
+					$("div.item-i-14-1").each(function(){
+						gca_tools.item.move(this,"inv");
+						total += $(this).attr("data-price-gold").attr("data-price-gold").toInt();
+					});
+					createNotification("Gladiatus Tools \n Gold collected, total: "+ total,"success");
+				}
+		}
+
+	});
+})();
