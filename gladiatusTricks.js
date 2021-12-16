@@ -11,7 +11,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
-// @license MIT
+// @license 	 MIT
 // @resource	 css https://raw.githubusercontent.com/Aveneid/GladiatusTricks/main/css.css
 
 // ==/UserScript==
