@@ -155,10 +155,11 @@ var gladiatusTricks =  (function() {
 			if(config.GT_getGold)
 				if($("div.item-i-14-1").length > 0){
 					var total = 0;
+					setInterval(function(){
 					$("div.item-i-14-1").each(function(){
 						gca_tools.item.move(this,"inv");
 						total += $(this).attr("data-price-gold").attr("data-price-gold").toInt();
-					});
+					});},500);
 					createNotification("Gladiatus Tools \n Gold collected, total: "+ total,"success");
 				}
 		}
